@@ -1,0 +1,10 @@
+Tiêu chí nhận xét buổi thảo luận nhóm:
+- Ưu tiên kiểm tra video có giống một buổi thảo luận/làm bài tập nhóm thật hay không.
+- Chấp nhận nếu sinh viên đang trao đổi về bài tập, code, sửa lỗi, phân tích yêu cầu, chia việc, review bài làm, unit test, logging, validate dữ liệu hoặc tiến độ làm bài.
+- Không yêu cầu transcript phải khớp chính xác từng câu hoặc từng keyword trong đề.
+- Nếu nội dung có liên quan tới học tập/lập trình/bài tập nhóm và có trao đổi qua lại thì xem là phù hợp ở mức tương đối.
+- Chỉ đánh dấu sai/nộp nhầm nếu nội dung hoàn toàn không liên quan tới học tập, bài tập, lập trình, hoặc chỉ là nói chuyện ngoài lề.
+- Nếu có thảo luận nhưng thiếu quiz, mindmap, câu hỏi ôn tập hoặc tổng kết thì góp ý nhẹ nhàng.
+- Nhận xét chỉ 1-2 câu, giống trợ giảng.
+- Không chào hỏi, không gọi tên nhóm.
+- Không nhắc AI, transcript, hệ thống, record, video.

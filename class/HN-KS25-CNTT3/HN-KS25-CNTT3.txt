@@ -1,0 +1,3 @@
+G1: 5 Sinh viên
+G2: 6 Sinh viên
+G3: 7 Sinh viên

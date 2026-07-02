@@ -1,0 +1,7 @@
+# Mỗi dòng là một mẫu nhận xét.
+# Có thể thêm mẫu mới ở cuối file. Dòng trống và dòng bắt đầu bằng # sẽ bị bỏ qua.
+
+Nhóm tích cực tham gia hoạt động, đánh giá cao.
+Nhóm có tiến hành thảo luận, nhưng cần thêm cho thầy một phần quiz hay mindmap để ôn lại kiến thức nha.
+Nhóm hoạt động tốt, cứ thế phát huy.
+Nhóm có tiến hành thảo luận, nhưng cần có thêm phần kiểm tra kiến thức của các thành viên trong nhóm em nhé.

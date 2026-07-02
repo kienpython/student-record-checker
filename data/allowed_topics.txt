@@ -1,0 +1,292 @@
+Hệ Thống Quản Lý Giải Đấu Rikkei Esports (Refactoring & Testing)  
+1. Bối cảnh nghiệp vụ 
+
+
+Tại ban tổ chức giải đấu Rikkei Esports, hệ thống phần mềm dùng để ghi nhận kết quả các trận đấu đang gặp vấn đề nghiêm trọng. Một cựu nhân viên đã để lại một file code duy nhất chứa vòng lặp while khổng lồ. Code vi phạm nghiêm trọng các tiêu chuẩn PEP 8, không có cơ chế bắt lỗi (Exception Handling) khiến phần mềm thường xuyên sập khi trọng tài gõ nhầm điểm số. Tệ hơn, khi có lỗi xảy ra, không ai biết nguyên nhân vì hệ thống không hề ghi log (Logging).
+
+Nhiệm vụ của bạn là đập đi xây lại (Refactor) hệ thống này thành một dự án đạt chuẩn kỹ sư chuyên nghiệp: Code sạch, chia module, bẫy lỗi triệt để, ghi log mọi hoạt động và có Unit Test bảo vệ logic cốt lõi.
+
+Dữ liệu các trận đấu được lưu dưới dạng danh sách chứa các dictionary:
+
+matches = [
+    {
+        "match_id": "M01",
+        "team_a": "T1",
+        "team_b": "GenG",
+        "score_a": 2,
+        "score_b": 1,
+        "status": "Completed"
+    },
+    {
+        "match_id": "M02",
+        "team_a": "JDG",
+        "team_b": "BLG",
+        "score_a": 0,
+        "score_b": 0,
+        "status": "Pending"
+    }
+]
+2. Yêu cầu nghiệp vụ  
+
+Chương trình hiển thị menu gồm 5 chức năng chính. 
+
+BẮT BUỘC: Mỗi chức năng phải được xử lý bởi một hàm (function) riêng biệt và phải tuân thủ chuẩn Clean Code (PEP 8).
+
+Yêu cầu kỹ thuật bắt buộc: Lập trình viên phải định nghĩa và sử dụng các hàm (Function) riêng biệt cho từng nghiệp vụ.
+
+===== HỆ THỐNG QUẢN LÝ GIẢI ĐẤU RIKKEI ESPORTS =====
+1. Hiển thị lịch thi đấu & Kết quả
+2. Thêm trận đấu mới
+3. Cập nhật tỷ số trận đấu
+4. Báo cáo thống kê
+5. Thoát chương trình
+================================================== 
+Chọn chức năng (1-5): 
+*** Chức năng 1: Hiển thị lịch thi đấu & Kết quả
+
+Hàm đề xuất: display_matches(match_list)
+
+Yêu cầu: In ra danh sách trận đấu với định dạng cột rõ ràng.
+
+Tích hợp Logging: Ghi log ở mức INFO với thông báo: "User viewed the match list."
+
+Trường hợp danh sách có dữ liệu
+Chọn chức năng (1-5): 1
+
+--- LỊCH THI ĐẤU & KẾT QUẢ ---
+Mã trận   | Đội A           | Đội B           | Tỷ số   | Trạng thái
+----------------------------------------------------------------------
+M01       | T1              | GenG            | 2-1     | Completed
+M02       | JDG             | BLG             | 0-0     | Pending
+Log được ghi vào tournament_app.log:
+
+[2026-06-03 10:20:15,123] - [INFO] - User viewed the match list.
+Trường hợp danh sách rỗng
+Chọn chức năng (1-5): 1
+Hiện chưa có trận đấu nào trong hệ thống.
+*** Chức năng 2: Thêm trận đấu mới
+
+Trường hợp thêm hợp lệ
+Chọn chức năng (1-5): 2
+
+--- THÊM TRẬN ĐẤU MỚI ---
+Nhập mã trận đấu: M03
+Nhập tên Đội A: G2
+Nhập tên Đội B: FNC
+
+Thành công: Đã thêm trận đấu M03.
+Dữ liệu mới được thêm vào danh sách:
+
+{
+    "match_id": "M03",
+    "team_a": "G2",
+    "team_b": "FNC",
+    "score_a": 0,
+    "score_b": 0,
+    "status": "Pending"
+}
+Log được ghi:
+
+[2026-06-03 10:22:30,456] - [INFO] - Match M03 added successfully
+Trường hợp mã trận đấu bị trùng
+Chọn chức năng (1-5): 2
+
+--- THÊM TRẬN ĐẤU MỚI ---
+Nhập mã trận đấu: M01
+
+Lỗi: Mã trận đấu M01 đã tồn tại.
+Log được ghi:
+
+[2026-06-03 10:23:10,100] - [WARNING] - Match ID M01 already exists.
+Trường hợp mã trận đấu rỗng
+Chọn chức năng (1-5): 2
+
+--- THÊM TRẬN ĐẤU MỚI ---
+Nhập mã trận đấu:    
+
+Mã trận đấu không được để trống.
+Log được ghi:
+
+[2026-06-03 10:24:00,321] - [WARNING] - User tried to add a match with empty match ID.
+Trường hợp tên đội rỗng
+Chọn chức năng (1-5): 2
+
+--- THÊM TRẬN ĐẤU MỚI ---
+Nhập mã trận đấu: M04
+Nhập tên Đội A: T1
+Nhập tên Đội B:    
+
+Tên đội không được để trống.
+Log được ghi:
+
+[2026-06-03 10:24:35,222] - [WARNING] - User tried to add a match with empty team name.
+*** Chức năng 3: Cập nhật tỷ số trận đấu 
+
+Hàm đề xuất: update_score(match_list)
+
+Yêu cầu nhập mã trận đấu, sau đó nhập điểm cho Đội A và điểm cho Đội B. Trạng thái (status) tự động chuyển thành "Completed".
+
+Debugging & Exception Handling: Trọng tài rất hay gõ nhầm chữ cái vào ô nhập điểm (VD: gõ "hai" thay vì "2"). Bắt buộc sử dụng try...except ValueError để bẫy lỗi nhập liệu. Yêu cầu nhập lại cho đến khi đúng là số nguyên >= 0.
+
+Logging: Ghi log ERROR kèm chi tiết lỗi (traceback hoặc message) nếu trọng tài nhập sai kiểu dữ liệu. Ghi log INFO nếu cập nhật thành công.
+
+Trường hợp cập nhật hợp lệ
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M02
+
+Trận đấu: JDG vs BLG (Pending)
+Nhập điểm Đội A: 2
+Nhập điểm Đội B: 0
+
+Thành công: Đã cập nhật tỷ số trận đấu M02.
+Sau khi cập nhật:
+
+{
+    "match_id": "M02",
+    "team_a": "JDG",
+    "team_b": "BLG",
+    "score_a": 2,
+    "score_b": 0,
+    "status": "Completed"
+}
+Log được ghi:
+
+[2026-06-03 10:25:20,111] - [INFO] - Match M02 score updated successfully
+Trường hợp trọng tài nhập chữ thay vì số
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M02
+
+Trận đấu: JDG vs BLG (Pending)
+Nhập điểm Đội A: hai
+
+Điểm số phải là số nguyên. Vui lòng nhập lại.
+Nhập điểm Đội A: 2
+Nhập điểm Đội B: một
+
+Điểm số phải là số nguyên. Vui lòng nhập lại.
+Nhập điểm Đội B: 1
+
+Thành công: Đã cập nhật tỷ số trận đấu M02.
+Log được ghi:
+
+[2026-06-03 10:26:05,666] - [ERROR] - Invalid score input. Error: invalid literal for int() with base 10: 'hai'
+[2026-06-03 10:26:10,777] - [ERROR] - Invalid score input. Error: invalid literal for int() with base 10: 'một'
+[2026-06-03 10:26:18,888] - [INFO] - Match M02 score updated successfully
+Trường hợp nhập điểm âm
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M02
+
+Trận đấu: JDG vs BLG (Pending)
+Nhập điểm Đội A: -1
+
+Điểm số phải lớn hơn hoặc bằng 0.
+Nhập điểm Đội A: 1
+Nhập điểm Đội B: 0
+
+Thành công: Đã cập nhật tỷ số trận đấu M02.
+Log được ghi:
+
+[2026-06-03 10:27:40,333] - [ERROR] - Negative score input detected: -1
+Trường hợp mã trận đấu không tồn tại
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M99
+
+Không tìm thấy trận đấu mang mã M99.
+Log được ghi:
+
+[2026-06-03 10:28:15,555] - [WARNING] - User tried to update non-existing match M99
+Trường hợp tỷ số 0-0 và trọng tài chưa xác nhận hoàn thành
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M02
+
+Trận đấu: JDG vs BLG (Pending)
+Nhập điểm Đội A: 0
+Nhập điểm Đội B: 0
+
+Tỷ số đang là 0-0. Trọng tài có xác nhận trận đã hoàn thành không? (y/n): n
+
+Thành công: Đã cập nhật tỷ số trận đấu M02.
+Trường hợp tỷ số 0-0 nhưng trọng tài xác nhận đã hoàn thành
+Chọn chức năng (1-5): 3
+
+--- CẬP NHẬT TỶ SỐ TRẬN ĐẤU ---
+Nhập mã trận đấu cần cập nhật: M02
+
+Trận đấu: JDG vs BLG (Pending)
+Nhập điểm Đội A: 0
+Nhập điểm Đội B: 0
+
+Tỷ số đang là 0-0. Trọng tài có xác nhận trận đã hoàn thành không? (y/n): y
+
+Thành công: Đã cập nhật tỷ số trận đấu M02.
+*** Chức năng 4: Báo cáo thống kê
+
+Hàm đề xuất: generate_report(match_list)
+
+Helper Function: Viết một hàm phụ trợ determine_winner(match) nhận vào dictionary của một trận đấu và trả về Tên đội thắng (hoặc "Draw" nếu hòa, hoặc "Not Started" nếu status là Pending).
+
+Duyệt danh sách và in ra các trận đã "Completed" cùng tên đội chiến thắng.
+
+Trường hợp có trận đã hoàn thành
+Chọn chức năng (1-5): 4
+
+--- BÁO CÁO THỐNG KÊ GIẢI ĐẤU ---
+M01: T1 2-1 GenG | Kết quả: T1
+M02: JDG 2-0 BLG | Kết quả: JDG
+
+Tổng số trận đã hoàn thành: 2
+Log được ghi:
+
+[2026-06-03 10:30:00,999] - [INFO] - User generated tournament report.
+Trường hợp trận hòa
+Chọn chức năng (1-5): 4
+
+--- BÁO CÁO THỐNG KÊ GIẢI ĐẤU ---
+Chưa có trận đấu nào hoàn thành.
+Tổng số trận đã hoàn thành: 0
+*** Chức năng 5: Thoát chương trình
+
+Ghi log INFO thông báo hệ thống đóng và thoát chương trình. 
+
+3. Edge Cases (Bẫy dữ liệu) 
+Bẫy 1 — Lỗi logic ẩn (Cần Debugging): Trong code cũ, khi tỷ số là 0-0 nhưng trạng thái vẫn bị gắn là "Completed" do logic kiểm tra sai. Bạn cần thiết lập Breakpoint trên IDE (VSCode/PyCharm) để debug và đảm bảo trận đấu chỉ "Completed" khi ít nhất 1 đội có điểm > 0, hoặc do trọng tài chủ động xác nhận.
+
+Bẫy 2 — Nhập sai lựa chọn menu: Nếu nhập ngoài phạm vi 1-5, in ra cảnh báo và ghi log WARNING "Invalid menu choice selected".
+
+Bẫy 3 — Dữ liệu rỗng: Cần dùng try...except KeyError trong quá trình trích xuất dữ liệu từ dictionary để phòng hờ trường hợp API trả về thiếu key score_a hoặc score_b.
+
+4. Yêu cầu 
+Với vai trò kỹ sư phần mềm, bạn phải thực hiện đầy đủ 3 phần sau:
+
+(1) Phân tích & Clean Code (Bắt buộc)
+
+Đặt tên biến và hàm chuẩn PEP 8 (snake_case cho biến/hàm).
+Viết Docstrings cho tất cả các hàm (Mô tả chức năng, tham số, kiểu trả về).
+Cấu hình thư viện logging của Python để ghi log ra một file tên là tournament_app.log với định dạng: [Thời gian] - [Cấp độ Log] - [Tin nhắn].
+(2) Triển khai Code (Refactoring & Exception)
+
+Viết source code chính vào file main.py.
+Ứng dụng triệt để try-except tại tất cả các điểm có tương tác nhập liệu từ người dùng.
+(3) Viết Unit Test (Bảo vệ logic)
+
+Tạo một file riêng tên là test_matches.py.
+Import thư viện unittest hoặc pytest.
+Viết ít nhất 3 test cases cho hàm phụ trợ determine_winner(match):
+Test case 1: Đội A thắng (VD: score_a = 2, score_b = 0).
+Test case 2: Trận đấu hòa (VD: score_a = 1, score_b = 1).
+Test case 3: Trận đấu chưa diễn ra (status = "Pending").
+5. Quy Định Nộp Bài
+Đưa toàn bộ mã nguồn và phần phân tích lên repository GitHub theo định dạng sau : 
+[Tên Lớp]_[Môn Học]_[Session bài học]_[Bài] (HNKS25CNTT1_Python_Session01_Ex01)
+Nộp đường dẫn repository lên hệ thống Portal
+Dự án nộp lên GitHub phải có cấu trúc thư mục rõ ràng gồm ít nhất 3 file: main.py, test_matches.py, và file tournament_app.log (sau khi chạy thử sinh ra). 
